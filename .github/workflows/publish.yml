@@ -1,0 +1,26 @@
+name: Publish slides
+
+on: [push]
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: sudo npm install -g reveal-md
+      - run: reveal-md --static output slides.md
+      - name: Publish
+        run: |
+          git config user.name davidep
+          git config user.email davide.principi@nethesis.it
+          mkdir -vp output
+          cp -vf *.svg *.json output/
+          git add output
+          TREE=$(git write-tree --prefix=output)
+          COMMIT=$(git commit-tree -m "Publish" ${TREE})
+          git push -f origin $COMMIT:refs/heads/github-pages
