@@ -19,7 +19,7 @@ jobs:
           git config user.name davidep
           git config user.email davide.principi@nethesis.it
           mkdir -vp output
-          cp -vf *.svg *.json output/
+          cp -vf *.* output/
           git add output
           TREE=$(git write-tree --prefix=output)
           COMMIT=$(git commit-tree -m "Publish" ${TREE})
